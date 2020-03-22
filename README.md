@@ -1,78 +1,44 @@
-# Join our Server!
-[![Discord server](https://discordapp.com/api/guilds/689535536934813823/embed.png?style=banner4)](https://discord.gg/EvbMshU)
+# Original API :
+This repo is a modified version of the COVID API by NovelCOVID https://github.com/NovelCOVID/API
 
-# API
-API for Current cases and more stuff about COVID-19 or the Novel Coronavirus Strain
-https://corona.lmao.ninja/
+Thank you guys for the API
 
-# Endpoints
+# Overview :
+This repo presents a COVID worker crawling the statistics from Worldometers and Johns Hopkins CSSE
+
+The result is stored in AWS S3 JSON files, and served by a Cloudfront distribution for a better performance, the cache is invalidated after each performed crawl
+
+# Requests Limits :
+No limits, feel free to query and use it as you wish
+
+# Data sources
+We don't overwrite the past days data, instead it is archived inside S3 folders with the following date format `YYYY-MM-DD`
+
+Base URL : https://covid-data.appsdoc.com
+
+# Data Endpoints
 |  GET Request  | Output  |
 | ------------ | ------------ |
-|  https://corona.lmao.ninja/all | Returns all total cases, recovery, and deaths. |
-|  https://corona.lmao.ninja/countries | Returns data of all countries that has COVID-19 |
-|  https://corona.lmao.ninja/countries?sort={parameter} | Returns data of each country sorted by the parameter |
-|  https://corona.lmao.ninja/countries/{country-name} | Returns data of a specific country |
-|  https://corona.lmao.ninja/states | Returns all United States of America and their Corona data |
-|  https://corona.lmao.ninja/jhucsse | Return data from the John Hopkins CSSE Data Repository (Provinces and such) |
-| https://corona.lmao.ninja/historical | Get historical data from the start of 2020. (JHU CSSE GISand Data) |
-# API Tutorial
-*Tutorial Made By [Apollo#6000](https://discord.gg/EvbMshU)*
-> Packages Needed
-> [novelcovid](https://www.npmjs.com/package/novelcovid)
+|  https://covid-data.appsdoc.com/overall.json | Returns all total cases, recovery, and deaths. |
+|  https://covid-data.appsdoc.com/world.json | Returns data of all countries that has COVID-19 |
+|  https://covid-data.appsdoc.com/{COUNTRY_CODE}.json | Returns data of a country using country code ISO 3166-1, example "MA.json" "ES.json" "US.json" |
+|  https://covid-data.appsdoc.com/states.json | Returns data of all the states in the USA |
+|  https://covid-data.appsdoc.com/jhucss.json | Return data from the John Hopkins CSSE Data Repository (Provinces and such) |
+| https://covid-data.appsdoc.com/historical.json | Get historical data from the start of 2020. (JHU CSSE GISand Data) |
 
-**Step 1**:
-Install [novelcovid](https://www.npmjs.com/package/novelcovid)
-```
-npm i novelcovid
-```
+To retrieve data for a specific day, you can use the following format :
+`https://covid-data.appsdoc.com/2020-03-22/overall.json`
 
-**Step 2**:
-Use either `.all()` or `.countries()` function to retrieve the given data.
+This format is valid for all the data endpoints in the table
 
-```js
-// We define the package
-let covid = require('novelcovid');
-
-// In this case we will be using .all()
-// If you would like a .countries() tutorial, feel free to join our support server
-
-let data = covid.all();
-console.log(data);
-
-/* Returns 
-{ cases: 220877,
-  deaths: 8988,
-  recovered: 85782,
-  updated: 1584612112774 }
-*/
-```
-
-**Step 3**:
-Once we have called the API, we can access the data that was given!
-```js
-let covid = require('novelcovid');
-
-// IMPORTANT: Inorder to access the data, we will need to create an async function.
-
-(async () => {
-    let data = await covid.all();
-
-    // Since we are using an async function, we need to return the data.
-    return console.log(`
-    Total Cases: ${data.cases}
-    Total Deaths: ${data.deaths}
-    Total Recovered: ${data.recovered}
-    Last Updated on: ${data.updated}`);
-})();
-```
+**Start date (We will populate the previous dates tomorrow) : 2020-03-22**
 
 **Note**
 Since `data.updated` returns milliseconds, you can do `new Date(data.updated)` as it returns an **ISO Date**
 
 You can read more about **new Date()** [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
 
-> For further support, you can join our discord server! More Tutorials can be found there too!
-> https://discord.gg/EvbMshU
-
 ### Source: 
 > https://www.worldometers.info/coronavirus/ 
+
+> https://github.com/CSSEGISandData/COVID-19
